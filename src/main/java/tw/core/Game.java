@@ -40,7 +40,7 @@ public class Game {
         return guessResults;
     }
 
-    public boolean checkCoutinue() {
+    public boolean checkContinue() {
         return this.checkStatus() == CONTINUE;
     }
 
