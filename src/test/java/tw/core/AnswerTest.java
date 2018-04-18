@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import tw.core.exception.OutOfRangeAnswerException;
+import tw.core.model.Record;
 
 import static org.junit.Assert.assertEquals;
 
@@ -48,6 +49,32 @@ public class AnswerTest {
         exception.expect(OutOfRangeAnswerException.class);
         exception.expectMessage("Answer format is incorrect");
         answer.validate();
+    }
+
+    @Test
+    public void show_increase_correct_number_if_answer_contains_matched_number_and_position(){
+        Answer answer = Answer.createAnswer("1 2 3 4");
+        Record check = answer.check(Answer.createAnswer("1 5 6 7"));
+        int correctNumber = check.getValue()[0];
+        assertEquals(1, correctNumber);
+    }
+
+    @Test
+    public void should_increase_include_only_number_if_answer_matches_number_with_wrong_position(){
+        Answer answer = Answer.createAnswer("1 2 3 4");
+        Record check = answer.check(Answer.createAnswer("5 6 7 1"));
+        int includeOnly = check.getValue()[1];
+        assertEquals(1, includeOnly);
+    }
+
+    @Test
+    public void should_set_correct_number_and_include_only_number_for_given_answer(){
+        Answer answer = Answer.createAnswer("1 2 3 4");
+        Record check = answer.check(Answer.createAnswer("0 2 3 1"));
+        int correctNumber = check.getValue()[0];
+        int includeOnly = check.getValue()[1];
+        assertEquals(2, correctNumber);
+        assertEquals(1, includeOnly);
     }
 
 }
