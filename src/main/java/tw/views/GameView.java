@@ -13,7 +13,6 @@ import java.util.List;
 public class GameView {
 
     private BufferedReader bufferedReader;
-
     {
         bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
