@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import tw.commands.GuessInputCommand;
 import tw.core.Answer;
 import tw.core.Game;
 import tw.core.exception.OutOfRangeAnswerException;
@@ -37,14 +38,18 @@ public class GameControllerTest {
         Assert.assertTrue(outContent.toString().contains("------Guess Number Game, You have 6 chances to guess!  ------"));
     }
 
-//    @Test
-//    public void should_give_guess_result_when_play_game() throws OutOfRangeAnswerException, IOException {
-//        AnswerGenerator mock = Mockito.mock(AnswerGenerator.class);
-//        Mockito.when(mock.generate()).thenReturn(Answer.createAnswer("1 2 3 4"));
-//        GameController controller = new GameController(
-//                new Game(mock), new GameView());
-//        controller.beginGame();
-//    }
+    @Test
+    public void should_give_guess_result_when_play_game() throws OutOfRangeAnswerException, IOException {
+        AnswerGenerator mock = Mockito.mock(AnswerGenerator.class);
+        GuessInputCommand command = Mockito.mock(GuessInputCommand.class);
+        Mockito.when(mock.generate()).thenReturn(Answer.createAnswer("1 2 3 4"));
+        Mockito.when(command.input()).thenReturn(Answer.createAnswer("1 3 4 6"));
+        GameController controller = new GameController(
+                new Game(mock), new GameView());
+        controller.beginGame();
+        controller.play(command);
+        Assert.assertTrue(outContent.toString().contains("1A2B"));
+    }
 
 
 
