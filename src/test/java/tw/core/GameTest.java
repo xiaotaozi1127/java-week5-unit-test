@@ -41,5 +41,17 @@ public class GameTest {
         Assert.assertEquals("continue", status);
     }
 
+    @Test
+    public void should_be_failed_if_guess_number_exceed_allowed_limit(){
+        game.guess(Answer.createAnswer("1 4 3 5"));
+        game.guess(Answer.createAnswer("1 4 3 5"));
+        game.guess(Answer.createAnswer("1 4 3 5"));
+        game.guess(Answer.createAnswer("1 4 3 5"));
+        game.guess(Answer.createAnswer("1 4 3 5"));
+        game.guess(Answer.createAnswer("1 4 3 5"));
+        String status = game.checkStatus();
+        Assert.assertEquals("fail", status);
+    }
+
 
 }
