@@ -36,7 +36,7 @@ public class AnswerTest {
     }
 
     @Test
-    public void show_throw_exception_if_input_contains_duplicate_numbers() throws OutOfRangeAnswerException {
+    public void show_throw_exception_if_input_distinct_number_less_than_4() throws OutOfRangeAnswerException {
         Answer answer = Answer.createAnswer("1 1 3 4");
         exception.expect(OutOfRangeAnswerException.class);
         exception.expectMessage("Answer format is incorrect");
