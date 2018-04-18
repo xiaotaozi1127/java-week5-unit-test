@@ -13,7 +13,6 @@ public class RandomIntGenerator {
     }
 
     public String generateNums(Integer digitmax, Integer numbersOfNeed) {
-
         if (digitmax < numbersOfNeed) {
             throw new IllegalArgumentException("Can't ask for more numbers than are available");
         }
