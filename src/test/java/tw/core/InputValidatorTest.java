@@ -28,4 +28,11 @@ public class InputValidatorTest {
         Boolean validate = validator.validate("1 3 4 4");
         Assert.assertFalse(validate);
     }
+
+    @Test
+    public void should_be_valid_if_input_4_numbers_less_than_10(){
+        InputValidator validator = new InputValidator();
+        Boolean validate = validator.validate("1 2 3 4");
+        Assert.assertTrue(validate);
+    }
 }
