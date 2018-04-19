@@ -1,9 +1,6 @@
 package tw.controllers;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mockito;
 import tw.commands.GuessInputCommand;
 import tw.core.Answer;
@@ -21,19 +18,20 @@ import java.io.PrintStream;
  * 在GameControllerTest文件中完成GameController中对应的单元测试
  */
 public class GameControllerTest {
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+    private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
-    @Before
-    public void setUpStreams() {
+    @BeforeClass
+    public static void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
     }
 
     @Test
     public void should_display_hint_message_when_game_begins() throws OutOfRangeAnswerException, IOException {
-        GameController controller = new GameController(
-                new Game(new AnswerGenerator(new RandomIntGenerator())), new GameView());
+        GameView gameView = new GameView();
+        Game game = new Game(new AnswerGenerator(new RandomIntGenerator()));
+        GameController controller = new GameController(game, gameView);
         controller.beginGame();
         Assert.assertTrue(outContent.toString().contains("------Guess Number Game, You have 6 chances to guess!  ------"));
     }
@@ -51,10 +49,8 @@ public class GameControllerTest {
         Assert.assertTrue(outContent.toString().contains("1A2B"));
     }
 
-
-
-    @After
-    public void restoreStreams() {
+    @AfterClass
+    public static void restoreStreams() {
         System.setOut(System.out);
         System.setErr(System.err);
     }
