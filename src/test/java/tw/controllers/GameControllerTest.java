@@ -1,13 +1,14 @@
 package tw.controllers;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockito.Mockito;
 import tw.commands.GuessInputCommand;
 import tw.core.Answer;
 import tw.core.Game;
 import tw.core.exception.OutOfRangeAnswerException;
-import tw.core.generator.AnswerGenerator;
-import tw.core.generator.RandomIntGenerator;
+import tw.core.model.GuessResult;
 import tw.views.GameView;
 
 import java.io.ByteArrayOutputStream;
@@ -29,24 +30,29 @@ public class GameControllerTest {
 
     @Test
     public void should_display_hint_message_when_game_begins() throws OutOfRangeAnswerException, IOException {
-        GameView gameView = new GameView();
-        Game game = new Game(new AnswerGenerator(new RandomIntGenerator()));
+        GameView gameView = Mockito.mock(GameView.class);
+        Game game = Mockito.mock(Game.class);
         GameController controller = new GameController(game, gameView);
         controller.beginGame();
-        Assert.assertTrue(outContent.toString().contains("------Guess Number Game, You have 6 chances to guess!  ------"));
+        Mockito.verify(gameView).showBegin();
     }
 
     @Test
     public void should_give_guess_result_when_play_game() throws OutOfRangeAnswerException, IOException {
-        AnswerGenerator mock = Mockito.mock(AnswerGenerator.class);
-        GuessInputCommand command = Mockito.mock(GuessInputCommand.class);
-        Mockito.when(mock.generate()).thenReturn(Answer.createAnswer("1 2 3 4"));
-        Mockito.when(command.input()).thenReturn(Answer.createAnswer("1 3 4 6"));
-        GameController controller = new GameController(
-                new Game(mock), new GameView());
+        GameView gameView = Mockito.mock(GameView.class);
+        Game game = Mockito.mock(Game.class);
+        GuessInputCommand inputCommand = Mockito.mock(GuessInputCommand.class);
+        Answer answer = Answer.createAnswer("1 2 3 4");
+        Mockito.when(inputCommand.input()).thenReturn(answer);
+        Mockito.when(game.checkContinue()).thenReturn(true).thenReturn(false);
+        GuessResult guessResult = new GuessResult("1A2B", answer);
+        Mockito.when(game.guess(answer)).thenReturn(guessResult);
+        GameController controller = new GameController(game, gameView);
         controller.beginGame();
-        controller.play(command);
-        Assert.assertTrue(outContent.toString().contains("1A2B"));
+        controller.play(inputCommand);
+        Mockito.verify(game, Mockito.times(2)).checkContinue();
+        Mockito.verify(game).guess(answer);
+        Mockito.verify(gameView).showGuessResult(guessResult);
     }
 
     @AfterClass
