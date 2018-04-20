@@ -17,21 +17,9 @@ public class AnswerTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void show_create_number_list_according_to_input_string(){
-        Answer answer = Answer.createAnswer("1 2 3 4");
-        int index = answer.getIndexOfNum("1");
-        assertEquals(0, index);
-
-        index = answer.getIndexOfNum("2");
-        assertEquals(1, index);
-
-        index = answer.getIndexOfNum("3");
-        assertEquals(2, index);
-
-        index = answer.getIndexOfNum("4");
-        assertEquals(3, index);
-
-        String tostring = answer.toString();
+    public void show_create_valid_answer_according_to_input_string(){
+        Answer actualAnswer = Answer.createAnswer("1 2 3 4");
+        String tostring = actualAnswer.toString();
         assertEquals("1 2 3 4", tostring);
     }
 
@@ -52,29 +40,47 @@ public class AnswerTest {
     }
 
     @Test
-    public void show_increase_correct_number_if_answer_contains_matched_number_and_position(){
-        Answer answer = Answer.createAnswer("1 2 3 4");
-        Record check = answer.check(Answer.createAnswer("1 5 6 7"));
+    public void show_set_correct_number_count_and_include_only_number_count_when_answer_check(){
+        Answer actualAnswer = Answer.createAnswer("1 2 3 4");
+        Answer inputAnswer = Answer.createAnswer("1 5 6 7");
+        Record check = actualAnswer.check(inputAnswer);
         int correctNumber = check.getValue()[0];
+        int includeOnly = check.getValue()[1];
         assertEquals(1, correctNumber);
+        assertEquals(0, includeOnly);
     }
 
     @Test
-    public void should_increase_include_only_number_if_answer_matches_number_with_wrong_position(){
-        Answer answer = Answer.createAnswer("1 2 3 4");
-        Record check = answer.check(Answer.createAnswer("5 6 7 1"));
-        int includeOnly = check.getValue()[1];
-        assertEquals(1, includeOnly);
-    }
-
-    @Test
-    public void should_set_correct_number_and_include_only_number_for_given_answer(){
-        Answer answer = Answer.createAnswer("1 2 3 4");
-        Record check = answer.check(Answer.createAnswer("0 2 3 1"));
+    public void should_set_correct_number_as_4_for_given_correct_answer(){
+        Answer actualAnswer = Answer.createAnswer("1 2 3 4");
+        Answer inputAnswer = Answer.createAnswer("1 2 3 4");
+        Record check = actualAnswer.check(inputAnswer);
         int correctNumber = check.getValue()[0];
         int includeOnly = check.getValue()[1];
-        assertEquals(2, correctNumber);
-        assertEquals(1, includeOnly);
+        assertEquals(4, correctNumber);
+        assertEquals(0, includeOnly);
+    }
+
+    @Test
+    public void should_set_include_only_number_as_4_if_given_answer_position_all_wrong(){
+        Answer actualAnswer = Answer.createAnswer("1 2 3 4");
+        Answer inputAnswer = Answer.createAnswer("4 3 2 1");
+        Record check = actualAnswer.check(inputAnswer);
+        int correctNumber = check.getValue()[0];
+        int includeOnly = check.getValue()[1];
+        assertEquals(0, correctNumber);
+        assertEquals(4, includeOnly);
+    }
+
+    @Test
+    public void should_set_correct_number_and_include_only_number_as_zero_if_all_wrong(){
+        Answer actualAnswer = Answer.createAnswer("1 2 3 4");
+        Answer inputAnswer = Answer.createAnswer("5 6 7 8");
+        Record check = actualAnswer.check(inputAnswer);
+        int correctNumber = check.getValue()[0];
+        int includeOnly = check.getValue()[1];
+        assertEquals(0, correctNumber);
+        assertEquals(0, includeOnly);
     }
 
 }
