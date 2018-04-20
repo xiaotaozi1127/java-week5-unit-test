@@ -1,6 +1,9 @@
 package tw.controllers;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 import tw.commands.InputCommand;
 import tw.core.Answer;
@@ -12,10 +15,6 @@ import tw.views.GameView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 在GameControllerTest文件中完成GameController中对应的单元测试
@@ -51,8 +50,7 @@ public class GameControllerTest {
         Mockito.when(inputCommand.input()).thenReturn(Answer.createAnswer("1 2 3 4"));
         controller.play(inputCommand);
         String systemOut = systemOut();
-        int occurrences = findSubStringOccurrences(systemOut, "Guess History:");
-        Assert.assertEquals(1, occurrences);
+        Mockito.verify(inputCommand, Mockito.times(1)).input();
         Assert.assertTrue(systemOut.endsWith("Guess Result: 4A0B\n"
                 + "Guess History:\n"
                 + "[Guess Numbers: 1 2 3 4, Guess Result: 4A0B]\n"
@@ -67,8 +65,7 @@ public class GameControllerTest {
                 .thenReturn(Answer.createAnswer("1 2 3 4"));
         controller.play(inputCommand);
         String systemOut = systemOut();
-        int occurrences = findSubStringOccurrences(systemOut, "Guess History:");
-        Assert.assertEquals(2, occurrences);
+        Mockito.verify(inputCommand, Mockito.times(2)).input();
         Assert.assertTrue(systemOut.endsWith("Game Status: success\n"));
     }
 
@@ -78,18 +75,8 @@ public class GameControllerTest {
         Mockito.when(inputCommand.input()).thenReturn(Answer.createAnswer("1 3 4 6"));
         controller.play(inputCommand);
         String systemOut = systemOut();
-        int occurrences = findSubStringOccurrences(systemOut, "Guess History:");
-        Assert.assertEquals(6, occurrences);
+        Mockito.verify(inputCommand, Mockito.times(6)).input();
         Assert.assertTrue(systemOut.endsWith("Game Status: fail\n"));
     }
 
-    private int findSubStringOccurrences(String systemOut, String subString) {
-        Matcher m = Pattern.compile("(?=(" + subString + "))").matcher(systemOut);
-        List<Integer> pos = new ArrayList<Integer>();
-        while (m.find())
-        {
-            pos.add(m.start());
-        }
-        return pos.size();
-    }
 }
