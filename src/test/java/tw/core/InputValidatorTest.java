@@ -30,7 +30,7 @@ public class InputValidatorTest {
     }
 
     @Test
-    public void should_be_valid_if_input_4_numbers_less_than_10(){
+    public void should_be_valid_if_input_4_distinct_numbers_with_value_less_than_10(){
         InputValidator validator = new InputValidator();
         Boolean validate = validator.validate("1 2 3 4");
         Assert.assertTrue(validate);
