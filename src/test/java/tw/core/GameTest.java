@@ -22,9 +22,21 @@ public class GameTest {
     }
 
     @Test
-    public void should_generate_correct_guess_result_for_given_guess_answer() {
-        GuessResult guessResult = game.guess(Answer.createAnswer("1 3 5 6"));
-        Assert.assertEquals("1A1B", guessResult.getResult());
+    public void should_display_correct_number_as_4_if_input_answer_is_correct() {
+        GuessResult guessResult = game.guess(Answer.createAnswer("1 2 3 4"));
+        Assert.assertEquals("4A0B", guessResult.getResult());
+    }
+
+    @Test
+    public void should_display_include_only_number_as_4_if_input_answer_position_is_all_wrong() {
+        GuessResult guessResult = game.guess(Answer.createAnswer("4 3 2 1"));
+        Assert.assertEquals("0A4B", guessResult.getResult());
+    }
+
+    @Test
+    public void should_display_correct_number_count_and_include_only_number_for_given_answer(){
+        GuessResult guessResult = game.guess(Answer.createAnswer("1 2 4 5"));
+        Assert.assertEquals("2A1B", guessResult.getResult());
     }
 
     @Test
@@ -42,16 +54,11 @@ public class GameTest {
     }
 
     @Test
-    public void should_be_failed_if_guess_number_exceed_allowed_limit(){
-        game.guess(Answer.createAnswer("1 4 3 5"));
-        game.guess(Answer.createAnswer("1 4 3 5"));
-        game.guess(Answer.createAnswer("1 4 3 5"));
-        game.guess(Answer.createAnswer("1 4 3 5"));
-        game.guess(Answer.createAnswer("1 4 3 5"));
-        game.guess(Answer.createAnswer("1 4 3 5"));
+    public void should_be_failed_if_guess_times_exceed_allowed_6_times(){
+        for(int i = 0; i < 6; i++){
+            game.guess(Answer.createAnswer("1 4 3 5"));
+        }
         String status = game.checkStatus();
         Assert.assertEquals("fail", status);
     }
-
-
 }
