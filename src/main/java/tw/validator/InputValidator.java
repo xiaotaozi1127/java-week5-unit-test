@@ -6,30 +6,32 @@ import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
-/**
- * Created by jxzhong on 2017/5/18.
- */
 public class InputValidator {
+
+    private static final int NUM_COUNT = 4;
+    private static final String SPACE = " ";
+    private static final int MAX_LIMIT = 10;
+
     public Boolean validate(String numStr) {
         List<String> numList = numStrToList(numStr);
-        int NumCount = 4;
-        Boolean isValidate = validateDigitsCount(numList, NumCount);
-        return isValidate && validateSingleGigit(numList, NumCount);
+        boolean digitCountValid = validateDigitsCount(numList);
+        boolean singleDigitValid = validateSingleDigit(numList);
+        return digitCountValid && singleDigitValid;
     }
 
-    private boolean validateSingleGigit(List<String> numList, int numCount) {
+    private boolean validateSingleDigit(List<String> numList) {
         return numList.stream()
                 .map(num -> parseInt(num))
                 .distinct()
-                .filter(num -> num < 10).count() == numCount;
+                .filter(num -> num < MAX_LIMIT).count() == NUM_COUNT;
     }
 
-    private Boolean validateDigitsCount(List<String> numList, int numCount) {
-        return numList.size() == numCount;
+    private boolean validateDigitsCount(List<String> numList) {
+        return numList.size() == NUM_COUNT;
     }
 
     private List<String> numStrToList(String numStr) {
-        return Arrays.stream(numStr.split(" "))
+        return Arrays.stream(numStr.split(SPACE))
                 .collect(Collectors.toList());
     }
 }

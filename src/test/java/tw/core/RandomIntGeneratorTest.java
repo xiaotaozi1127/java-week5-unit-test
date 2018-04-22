@@ -42,6 +42,16 @@ public class RandomIntGeneratorTest {
     }
 
     @Test
+    public void should_generate_required_integer_numbers(){
+        RandomIntGenerator generator = new RandomIntGenerator();
+        String generateNums = generator.generateNums(5, 4);
+        String[] split = generateNums.split(" ");
+        assertEquals(4, split.length);
+        List<Integer> list = Arrays.stream(split).map(i -> Integer.parseInt(i)).collect(Collectors.toList());
+        assertEquals(4, list.size());
+    }
+
+    @Test
     public void should_generate_required_distinct_numbers(){
         RandomIntGenerator generator = new RandomIntGenerator();
         String generateNums = generator.generateNums(5, 4);
